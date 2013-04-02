@@ -36,3 +36,21 @@ block content
           button.btn.btn-primary(type='submit')
             i.icon-share
             |  Post
+  for post in (posts || [])
+    .row-fluid
+      .span12
+        .op.well.well-small
+          .info
+            | #{post.subject}
+            |  #{post.name}
+            |  #{post.date}
+            |  #{post._id}
+          if post.file.name
+            .imageinfo
+              | #{post.file.name}
+              |  (#{Number(post.file.size / 1024).toFixed(2)} KB,
+              |  #{post.file.width}x#{post.file.height}
+              |  #{post.file.orig})
+            .image.pull-left
+              img(src=(prefix + '/thumbs/' + post.file.name))
+          .comment #{post.comment.toString()}

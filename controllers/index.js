@@ -9,6 +9,13 @@ module.exports = function (app, db, config, passport) {
 
   require('./auth')(app, db, config, passport);
 
+  app.get(prefix + '/page/:page', function (req, res) {
+    req.params.page = Number(req.params.page) || 1;
+    db.post.findPaged(req.params.page, function (err, posts) {
+      res.render('index', { page: req.params.page, posts: posts });
+    });
+  });
+
   app.post(prefix + '/:id', function (req, res) {
     // TODO: Handle reply
     res.redirect(prefix + '/' + req.params.id);
@@ -33,6 +40,8 @@ module.exports = function (app, db, config, passport) {
               else if (info.format == 'GIF') post.file.type = 'gif';
               else post.file.type = 'jpg';
               post.file.name = post._id.toString() + '.' + post.file.type;
+              post.file.width = info.width;
+              post.file.height = info.height;
 
               imagick.resize({
                 srcPath: req.files.file.path,
@@ -61,8 +70,9 @@ module.exports = function (app, db, config, passport) {
   });
 
   app.get(prefix + '/', function (req, res) {
-    // TODO: Load threads
-    res.render('index');
+    db.post.findPaged(1, function (err, posts) {
+      res.render('index', { page: 1, posts: posts });
+    });
   });
 };
 
