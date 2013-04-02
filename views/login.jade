@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  .row-fluid
+    .span6(style='margin: 0 auto; float: none;')
+      form.form-horizontal(method='post', action='#{prefix}/auth/local')
+        fieldset
+          legend #{__('Login')}
+          if error && error != ''
+            .alert.alert-error #{__(error.message || error)}
+
+          .control-group
+            label.control-label(for='username') #{__('Username')}
+            .controls
+              .input-append
+                input#username(type='text', name='username')
+                span.add-on
+                  i.icon-user
+
+          .control-group
+            label.control-label(for='password') #{__('Password')}
+            .controls
+              .input-append
+                input#password(type='password', name='password')
+                span.add-on
+                  i.icon-lock
+
+          .form-actions
+            button.btn.btn-primary(type='submit')
+              i.icon-signin
+              |  #{__('Login')}

@@ -1,0 +1,36 @@
+{
+  "name": "template",
+  "version": "0.0.0",
+  "private": true,
+  "author": {
+    "name": "William Turner",
+    "email": "willtur.will@gmail.com"
+  },
+  "description": "An MVC ExpressJS template",
+  "subdomain": "template",
+  "main": "",
+  "homepage": "http://template.willisite.com",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "contributors": [
+    {
+      "name": "William Turner",
+      "email": "willtur.will@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "mongoose": "3.5.x",
+    "connect-flash": "0.1.x",
+    "express": "3.0.x",
+    "passport": "0.1.x",
+    "passport-local": "0.1.x",
+    "consolidate": "0.7.x",
+    "jade": "0.28.x",
+    "i18n": "0.3.x"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=0.6"
+  }
+}
