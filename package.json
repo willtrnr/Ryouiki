@@ -7,8 +7,8 @@
     "email": "willtur.will@gmail.com"
   },
   "description": "A 4chan style imageboard written in Node.js with Express and Mongoose.",
-  "subdomain": "board",
-  "main": "",
+  "subdomain": "board-willisite",
+  "main": "server.js",
   "homepage": "https://board-willisite.rhcloud.com/",
   "scripts": {
     "start": "node server.js"
@@ -30,6 +30,7 @@
   },
   "devDependencies": {},
   "engines": {
-    "node": ">=0.6"
+    "node": ">=0.6.0",
+    "npm": ">=1.0.0"
   }
 }
