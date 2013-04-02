@@ -8,6 +8,6 @@ module.exports = {
   port     : Number(process.env.OPENSHIFT_NODEJS_PORT) || ((process.env.NODE_ENV == 'production') ? 80 : 3000),
   mongodb: {
     url    : process.env.OPENSHIFT_MONGODB_DB_URL,
-    db     : 'ryouiki'
+    db     : 'board'
   }
 };
