@@ -5,12 +5,12 @@ block content
     .span6(style='margin: 0 auto; float: none;')
       form.form-horizontal(method='post', action='#{prefix}/auth/local')
         fieldset
-          legend #{__('Login')}
+          legend Login
           if error && error != ''
-            .alert.alert-error #{__(error.message || error)}
+            .alert.alert-error #{error.message || error}
 
           .control-group
-            label.control-label(for='username') #{__('Username')}
+            label.control-label(for='username') Username
             .controls
               .input-append
                 input#username(type='text', name='username')
@@ -18,7 +18,7 @@ block content
                   i.icon-user
 
           .control-group
-            label.control-label(for='password') #{__('Password')}
+            label.control-label(for='password') Password
             .controls
               .input-append
                 input#password(type='password', name='password')
@@ -28,4 +28,4 @@ block content
           .form-actions
             button.btn.btn-primary(type='submit')
               i.icon-signin
-              |  #{__('Login')}
+              |  Login
