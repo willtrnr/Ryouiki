@@ -9,5 +9,6 @@ module.exports = {
   mongodb: {
     url    : process.env.OPENSHIFT_MONGODB_DB_URL,
     db     : 'board'
-  }
+  },
+  datadir  : process.env.OPENSHIFT_DATA_DIR || (__dirname + '/data')
 };

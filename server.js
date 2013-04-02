@@ -48,6 +48,7 @@ app.configure(function () {
   });
   // Route serving
   app.use(app.router);
+  app.use(express['static'](config.datadir));
   app.use(express['static'](path.join(__dirname, 'public')));
 });
 

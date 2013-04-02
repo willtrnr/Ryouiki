@@ -1,7 +1,38 @@
 extends layout
 
 block content
-  .row
+  .row-fluid
     .span12
       .page-header
         h1 #{pagetitle}
+  .row-fluid
+    .span12
+      form.form-horizontal(action='#{prefix}/', method='post', enctype='multipart/form-data')
+        .control-group
+          label.control-label(for='name') Name
+          .controls
+            input#name(name='name', type='text', value='Anonymous', required)
+        .control-group
+          label.control-label(for='email') E-mail
+          .controls
+            input#email(name='email', type='email')
+        .control-group
+          label.control-label(for='subject') Subject
+          .controls
+            input#subject(name='subject', type='text')
+        .control-group
+          label.control-label(for='comment') Comment
+          .controls
+            textarea#comment(name='comment', cols='30', rows='3')
+        .control-group
+          label.control-label(for='file') File
+          .controls
+            input#file(name='file', type='file')
+        .control-group
+          label.control-label(for='password') Password
+          .controls
+            input#password(name='password', type='password')
+        .form-actions
+          button.btn.btn-primary(type='submit')
+            i.icon-share
+            |  Post
