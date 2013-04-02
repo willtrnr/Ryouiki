@@ -39,7 +39,7 @@ block content
   for post in (posts || [])
     .row-fluid
       .span12
-        .op.well.well-small
+        .op.well
           .info
             | #{post.subject}
             |  #{post.name}
@@ -54,3 +54,4 @@ block content
             .image.pull-left
               img(src=(prefix + '/thumbs/' + post.file.name))
           .comment #{post.comment.toString()}
+          div(style='clear: both;')
