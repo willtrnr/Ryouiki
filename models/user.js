@@ -3,7 +3,7 @@ var crypto = require('crypto');
 module.exports = function (mongo, db, config, Schema) {
   var User = new Schema({
     username : { type: String, index: { unique: true } },
-    password : String,
+    password : { type: String, requried: true },
     email    : { type: String, index: { unique: true } }
   });
 

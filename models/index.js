@@ -6,6 +6,7 @@ module.exports = function (config) {
 
   var db = {};
   db.User = require('./user')(mongo, db, config, Schema);
+  db.Post = require('./post')(mongo, db, config, Schema);
 
   var models = {};
   for (var key in db) {

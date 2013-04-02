@@ -1,7 +1,6 @@
 var express  = require('express'),
     passport = require('passport'),
     flash    = require('connect-flash'),
-    i18n     = require('i18n'),
     cons     = require('consolidate'),
     http     = require('http'),
     path     = require('path');
@@ -12,11 +11,6 @@ var app      = express();
 var sessions = new express.session.MemoryStore(); // Must change for cluster-safe
 
 require('./auth')(passport, db, config);
-
-i18n.configure({
-  locales: ['en', 'fr'],
-  extension: '.json'
-});
 
 app.configure(function () {
   // Templating
@@ -38,19 +32,6 @@ app.configure(function () {
   // Sessions
   app.use(express.cookieParser(config.secret));
   app.use(express.session({ store: sessions, secret: config.secret, key: 'express.sid' }));
-  // i18n
-  app.use(i18n.init);
-  app.use(function (req, res, next) {
-    // Force lacale to 'en'
-    //i18n.setLocale(req, 'en');
-    res.locals.__ = function () {
-      return i18n.__.apply(req, arguments);
-    };
-    res.locals.__n = function () {
-      return i18n.__n.apply(req, arguments);
-    };
-    next();
-  });
   // Flash messages
   app.use(flash());
   app.use(function (req, res, next) {
