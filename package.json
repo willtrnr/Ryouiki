@@ -1,15 +1,15 @@
 {
-  "name": "template",
+  "name": "ryouiki",
   "version": "0.0.0",
   "private": true,
   "author": {
     "name": "William Turner",
     "email": "willtur.will@gmail.com"
   },
-  "description": "An MVC ExpressJS template",
-  "subdomain": "template",
+  "description": "A 4chan style imageboard written in Node.js with Express and Mongoose.",
+  "subdomain": "board",
   "main": "",
-  "homepage": "http://template.willisite.com",
+  "homepage": "https://board-willisite.rhcloud.com/",
   "scripts": {
     "start": "node server.js"
   },
@@ -20,14 +20,13 @@
     }
   ],
   "dependencies": {
-    "mongoose": "3.5.x",
+    "mongoose": "3.6.x",
     "connect-flash": "0.1.x",
-    "express": "3.0.x",
+    "express": "3.1.x",
     "passport": "0.1.x",
-    "passport-local": "0.1.x",
-    "consolidate": "0.7.x",
-    "jade": "0.28.x",
-    "i18n": "0.3.x"
+    "passport-local": "0.1.6",
+    "consolidate": "0.9.x",
+    "jade": "0.28.x"
   },
   "devDependencies": {},
   "engines": {
