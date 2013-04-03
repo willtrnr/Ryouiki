@@ -19,3 +19,6 @@
         li.muted= post.file.orig
     blockquote= post.comment
     .clearfix
+    if post.replies && post.replies.length
+      each reply in post.replies
+        include reply

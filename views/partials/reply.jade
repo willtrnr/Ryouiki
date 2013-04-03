@@ -1,0 +1,18 @@
+.media
+  if reply.file.name
+    a.pull-left(href=(prefix + '/uploads/' + reply.file.name))
+      img.media-object(src=(prefix + '/thumbs/' + reply.file.name))
+  .media-body
+    ul.inline
+      li
+        span.label.label-important= reply.name
+      li
+        span.label.label-info= reply.date
+      li
+        a(name=reply._id, href=(prefix + '/' + reply.op + '#' + reply._id))= reply._id
+      if reply.file.name
+        li.muted= Number(reply.file.size / 1024).toFixed(2) + ' KB'
+        li.muted= reply.file.width + 'x' + reply.file.height
+        li.muted= reply.file.orig
+    blockquote= reply.comment
+    .clearfix

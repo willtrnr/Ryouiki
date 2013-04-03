@@ -36,8 +36,8 @@ app.configure(function () {
   // Flash messages
   app.use(flash());
   app.use(function (req, res, next) {
-    res.locals.success = req.flash('success') || null;
-    res.locals.error = req.flash('error') || null;
+    res.locals.success = req.flash('success') || [];
+    res.locals.error = req.flash('error') || [];
     next();
   });
   // Authentication

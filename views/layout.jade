@@ -32,6 +32,20 @@ body
           .page-header
             h1
               a(href=(prefix + '/'))= title
+      if success.length
+        .row-fluid
+          .span12
+            .alert.alert-block.alert-success
+              ul
+                each msg in success
+                  li= msg
+      if error.length
+        .row-fluid
+          .span12
+            .alert.alert-block.alert-error
+              ul
+                each msg in error
+                  li= msg
 
   // JavaScript
   // Placed at the end of the document so the pages load faster

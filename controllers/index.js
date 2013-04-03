@@ -1,3 +1,5 @@
+var async = require('async');
+
 module.exports = function (app, db, config, passport) {
   var prefix = config.prefix || '';
 
@@ -8,7 +10,11 @@ module.exports = function (app, db, config, passport) {
   app.get(prefix + '/page/:page', function (req, res) {
     req.params.page = Number(req.params.page) || 1;
     db.post.findPaged(req.params.page, function (err, posts) {
-      res.render('index', { page: req.params.page, posts: posts, pagetitle: 'Page ' + req.params.page });
+      async.each(posts, function (post, callback) {
+        post.findReplies(3, callback);
+      }, function (err) {
+        res.render('index', { page: req.params.page, posts: posts, pagetitle: 'Page ' + req.params.page });
+      });
     });
   });
 
@@ -22,15 +28,38 @@ module.exports = function (app, db, config, passport) {
             post.bumped = Date.now();
             post.save(function (err, p) {
               if (!err && p) {
-                if (req.files.file && req.files.file.type.match(/^image\//i)) {
-                  reply.attachFile(req.files.file, function (err, r) {
-                    if (!err) res.redirect(prefix + '/' + p._id + '#' + r._id);
-                    else res.redirect(prefix + '/' + p._id + '#' + r._id);
-                  });
-                } else res.redirect(prefix + '/' + p._id + '#' + r._id);
-              } else res.redirect(prefix + '/' + post._id + '#' + r._id);
+                if (req.files.file) {
+                  if (req.files.file.type.match(/^image\//i)) {
+                    reply.attachFile(req.files.file, function (err, r) {
+                      if (!err) {
+                        req.flash('success', 'Reply posted.');
+                        res.redirect(prefix + '/' + p._id + '#' + r._id);
+                      } else {
+                        r.remove(function (err) {
+                          if (err) req.flash('error', err);
+                          res.redirect(prefix + '/' + p._id);
+                        });
+                      }
+                    });
+                  } else {
+                    r.remove(function (err) {
+                      if (err) req.flash('error', err);
+                      res.redirect(prefix + '/' + p._id);
+                    });
+                  }
+                } else {
+                  req.flash('success', 'Reply posted.');
+                  res.redirect(prefix + '/' + p._id + '#' + r._id);
+                }
+              } else {
+                req.flash('error', err);
+                res.redirect(prefix + '/' + post._id);
+              }
             });
-          } else res.redirect(prefix + '/' + post._id);
+          } else {
+            req.flash('error', err);
+            res.redirect(prefix + '/' + post._id);
+          }
         });
       } else res.redirect(prefix + '/');
     });
@@ -53,17 +82,35 @@ module.exports = function (app, db, config, passport) {
       p.save(function (err, post) {
         if (!err && post) {
             post.attachFile(req.files.file, function (err, p) {
-              if (!err) res.redirect(prefix + '/' + post._id);
-              else res.redirect(prefix + '/' + post._id);
+              if (!err) {
+                req.flash('success', 'Thread posted.');
+                res.redirect(prefix + '/' + post._id);
+              } else {
+                req.flash('error', err);
+                post.remove(function (err) {
+                  if (err) req.flash('error', err);
+                  res.redirect(prefix + '/');
+                });
+              }
             });
-        } else res.redirect(prefix + '/');
+        } else {
+          req.flash('error', err);
+          res.redirect(prefix + '/');
+        }
       });
-    } else res.redirect(prefix + '/');
+    } else {
+      req.flash('error', 'File is required when starting a thread.');
+      res.redirect(prefix + '/');
+    }
   });
 
   app.get(prefix + '/', function (req, res) {
     db.post.findPaged(1, function (err, posts) {
-      res.render('index', { page: 1, posts: posts });
+      async.each(posts, function (post, callback) {
+        post.findReplies(3, callback);
+      }, function (err) {
+        res.render('index', { page: 1, posts: posts });
+      });
     });
   });
 };

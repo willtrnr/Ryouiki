@@ -18,8 +18,19 @@ module.exports = function (mongo, db, config, Schema) {
       width  : { type: Number },
       height : { type: Number }
     },
-    op       : { type: Schema.Types.ObjectId, ref: 'post' }
+    op       : { type: Schema.Types.ObjectId, ref: 'post' },
+    password : { type: String }
   });
+
+  Post.path('password').set(function (password) {
+    return this.model('post').hashPassword(password);
+  });
+
+  Post.statics.hashPassword = function (password) {
+    var shasum = crypto.createHash('sha512');
+    shasum.update(config.salt + password + config.salt);
+    return shasum.digest('hex');
+  };
 
   Post.statics.findAll = function (callback) {
     this.find().exec(function (err, docs) {
@@ -75,6 +86,14 @@ module.exports = function (mongo, db, config, Schema) {
           } else if (callback) callback(err, self);
         });
       } else if (callback) callback(err, self);
+    });
+  };
+
+  Post.methods.findReplies = function (count, callback) {
+    var self = this;
+    this.model('post').find({ op: this._id }).sort({ _id: -1 }).limit(count).exec(function (err, docs) {
+      if (!err && docs) self.replies = docs.reverse();
+      if (callback) callback(err, self.replies);
     });
   };
 
