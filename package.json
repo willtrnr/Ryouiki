@@ -28,7 +28,8 @@
     "consolidate": "0.9.x",
     "jade": "0.28.x",
     "gm": "1.8.x",
-    "async": "0.2.x"
+    "async": "0.2.x",
+    "marked": "*"
   },
   "devDependencies": {},
   "engines": {

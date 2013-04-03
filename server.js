@@ -1,5 +1,6 @@
 var express  = require('express'),
     //passport = require('passport'),
+    marked   = require('marked'),
     flash    = require('connect-flash'),
     cons     = require('consolidate'),
     http     = require('http'),
@@ -12,6 +13,16 @@ var sessions = new express.session.MemoryStore(); // Must change for cluster-saf
 
 //require('./auth')(passport, db, config);
 
+marked.setOptions({
+  pedantic: false,
+  gfm: true,
+  sanitize: true,
+  tables: false,
+  breaks: false,
+  smartLists: true,
+  langPrefix: 'lang-'
+});
+
 app.configure(function () {
   // Templating
   app.engine('jade', cons.jade);
@@ -22,7 +33,8 @@ app.configure(function () {
     config:    config || {},
     title:     config.title  || '',
     pagetitle: '',
-    prefix:    config.prefix || ''
+    prefix:    config.prefix || '',
+    marked:    marked
   });
   // Standard stuff
   app.use(express.favicon());
