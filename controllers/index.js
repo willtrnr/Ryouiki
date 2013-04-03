@@ -28,7 +28,7 @@ module.exports = function (app, db, config, passport) {
             post.bumped = Date.now();
             post.save(function (err, p) {
               if (!err && p) {
-                if (req.files.file) {
+                if (req.files.file && req.files.file.name) {
                   if (req.files.file.type.match(/^image\//i)) {
                     reply.attachFile(req.files.file, function (err, r) {
                       if (!err) {
@@ -77,7 +77,7 @@ module.exports = function (app, db, config, passport) {
   });
 
   app.post(prefix + '/', function (req, res) {
-    if (req.files.file && req.files.file.type.match(/^image\//i)) {
+    if (req.files.file && req.files.file.name && req.files.file.type.match(/^image\//i)) {
       var p = new db.post(req.body);
       p.save(function (err, post) {
         if (!err && post) {
