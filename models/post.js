@@ -5,6 +5,8 @@ var crypto = require('crypto'),
 
 module.exports = function (mongo, db, config, Schema) {
   var Post = new Schema({
+    board    : { type: String },
+    op       : { type: Schema.Types.ObjectId, ref: 'post' },
     name     : { type: String, required: true, 'default': 'Anonymous' },
     subject  : { type: String },
     date     : { type: Date, required: true, 'default': Date.now },
@@ -18,7 +20,6 @@ module.exports = function (mongo, db, config, Schema) {
       width  : { type: Number },
       height : { type: Number }
     },
-    op       : { type: Schema.Types.ObjectId, ref: 'post' },
     password : { type: String }
   });
 

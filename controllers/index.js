@@ -11,7 +11,7 @@ module.exports = function (app, db, config, passport) {
     req.params.page = Number(req.params.page) || 1;
     db.post.findPaged(req.params.page, function (err, posts) {
       async.each(posts, function (post, callback) {
-        post.findReplies(3, callback);
+        post.findReplies(config.replies, callback);
       }, function (err) {
         res.render('index', { page: req.params.page, posts: posts, pagetitle: 'Page ' + req.params.page });
       });
@@ -107,7 +107,7 @@ module.exports = function (app, db, config, passport) {
   app.get(prefix + '/', function (req, res) {
     db.post.findPaged(1, function (err, posts) {
       async.each(posts, function (post, callback) {
-        post.findReplies(3, callback);
+        post.findReplies(config.replies, callback);
       }, function (err) {
         res.render('index', { page: 1, posts: posts });
       });
