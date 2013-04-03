@@ -1,0 +1,28 @@
+extends layout
+
+append content
+  .row-fluid
+    .span12
+      form.form-horizontal(method='post', enctype='multipart/form-data')
+        .control-group
+          label.control-label(for='name') Name
+          .controls
+            input#name(name='name', type='text', value='Anonymous', required)
+        .control-group
+          label.control-label(for='comment') Comment
+          .controls
+            textarea#comment(name='comment', cols='30', rows='3')
+        .control-group
+          label.control-label(for='file') File
+          .controls
+            input#file(name='file', type='file')
+        .form-actions
+          button.btn.btn-primary(type='submit')
+            i.icon-reply
+            |  Reply
+  .row-fluid
+    .span12
+      include partials/post
+      if replies && replies.length
+        each post in replies
+          include partials/post

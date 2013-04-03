@@ -21,7 +21,7 @@ app.configure(function () {
   app.locals({
     config:    config || {},
     title:     config.title  || '',
-    pagetitle: config.title  || '',
+    pagetitle: '',
     prefix:    config.prefix || ''
   });
   // Standard stuff

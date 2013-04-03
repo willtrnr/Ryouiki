@@ -1,7 +1,7 @@
 doctype 5
 head
   meta(charset='utf-8')
-  title #{pagetitle}
+  title= (((pagetitle != '') ? pagetitle  + ' - ' : '') + title)
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   meta(name='description', content='')
   meta(name='author', content='William Turner <willtur.will@gmail.com>')
@@ -27,6 +27,11 @@ head
 body
   .container-fluid
     block content
+      .row-fluid
+        .span12
+          .page-header
+            h1
+              a(href=(prefix + '/'))= title
 
   // JavaScript
   // Placed at the end of the document so the pages load faster

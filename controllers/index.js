@@ -1,7 +1,3 @@
-var imagick = require('imagemagick'),
-    path = require('path'),
-    fs = require('fs');
-
 module.exports = function (app, db, config, passport) {
   var prefix = config.prefix || '';
 
@@ -12,18 +8,42 @@ module.exports = function (app, db, config, passport) {
   app.get(prefix + '/page/:page', function (req, res) {
     req.params.page = Number(req.params.page) || 1;
     db.post.findPaged(req.params.page, function (err, posts) {
-      res.render('index', { page: req.params.page, posts: posts });
+      res.render('index', { page: req.params.page, posts: posts, pagetitle: 'Page ' + req.params.page });
     });
   });
 
   app.post(prefix + '/:id', function (req, res) {
-    // TODO: Handle reply
-    res.redirect(prefix + '/' + req.params.id);
+    db.post.findById(req.params.id, function (err, post) {
+      if (!err && post) {
+        var r = new db.post(req.body);
+        r.op = post._id;
+        r.save(function (err, reply) {
+          if (!err && r) {
+            post.bumped = Date.now();
+            post.save(function (err, p) {
+              if (!err && p) {
+                if (req.files.file && req.files.file.type.match(/^image\//i)) {
+                  reply.attachFile(req.files.file, function (err, r) {
+                    if (!err) res.redirect(prefix + '/' + p._id + '#' + r._id);
+                    else res.redirect(prefix + '/' + p._id + '#' + r._id);
+                  });
+                } else res.redirect(prefix + '/' + p._id + '#' + r._id);
+              } else res.redirect(prefix + '/' + post._id + '#' + r._id);
+            });
+          } else res.redirect(prefix + '/' + req.params.id);
+        });
+      }
+    });
   });
 
   app.get(prefix + '/:id', function (req, res) {
-    // TODO: Load thread
-    res.redirect(prefix + '/');
+    db.post.findById(req.params.id, function (err, post) {
+      if (!err && post) {
+        db.post.findByOp(post._id, function (err, replies) {
+          if (post.subject) res.render('thread', { post: post, replies: replies || [], pagetitle: post.subject });
+        });
+      } else res.redirect(prefix + '/');
+    });
   });
 
   app.post(prefix + '/', function (req, res) {
@@ -31,38 +51,9 @@ module.exports = function (app, db, config, passport) {
     p.save(function (err, post) {
       if (!err && post) {
         if (req.files.file && req.files.file.type.match(/^image\//i)) {
-          post.file.orig = req.files.file.name;
-          post.file.size = req.files.file.size;
-
-          imagick.identify(req.files.file.path, function (err, info) {
-            if (!err) {
-              if (info.format == 'PNG') post.file.type = 'png';
-              else if (info.format == 'GIF') post.file.type = 'gif';
-              else post.file.type = 'jpg';
-              post.file.name = post._id.toString() + '.' + post.file.type;
-              post.file.width = info.width;
-              post.file.height = info.height;
-
-              imagick.resize({
-                srcPath: req.files.file.path,
-                dstPath: path.join(config.datadir, 'thumbs', post.file.name),
-                width: (info.width >= info.height) ? 250 : 0,
-                height: (info.width <= info.height) ? 250 : 0,
-                format: post.file.type
-              }, function (err, sout, serr) {
-                if (!err) {
-                  var r = fs.createReadStream(req.files.file.path);
-                  r.pipe(fs.createWriteStream(path.join(config.datadir, 'uploads', post.file.name)));
-                  r.on('end', function () {
-                    fs.unlinkSync(req.files.file.path);
-                    post.save(function (err, p) {
-                      if (!err && post) res.redirect(prefix + '/' + p._id);
-                      else res.redirect(prefix + '/' + post._id);
-                    });
-                  });
-                } else res.redirect(prefix + '/' + post._id);
-              });
-            } else res.redirect(prefix + '/' + post._id);
+          post.attachFile(req.files.file, function (err, p) {
+            if (!err) res.redirect(prefix + '/' + post._id);
+            else res.redirect(prefix + '/' + post._id);
           });
         } else res.redirect(prefix + '/' + post._id);
       } else res.redirect(prefix + '/');
