@@ -26,7 +26,8 @@ append content
             |  Reply
   .row-fluid
     .span12
-      include partials/post
-      if replies && replies.length
-        each post in replies
-          include partials/post
+      .well.well-small
+        include partials/post
+        if replies && replies.length
+          each post in replies
+            include partials/post
