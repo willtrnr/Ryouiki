@@ -40,7 +40,7 @@ append content
         ul
           li(class=((page == 1) ? 'disabled' : null))
               a(href=(prefix + '/page/' + (page - 1))) Prev
-          - for (var p = 1; p <= 5; ++p)
+          - for (var p = ((page > 3) ? page - 2 : 1); p <= ((page > 3) ? page + 2 : 5); ++p)
             li(class=((page == p) ? 'active' : null))
               a(href=(prefix + '/page/' + p))= p
           li
