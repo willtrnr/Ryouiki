@@ -40,14 +40,14 @@ body
               .alert.alert-block.alert-success
                 ul
                   each msg in success
-                    li= msg
+                    li= msg.message || msg
         if error.length
           .row-fluid
             .span12
               .alert.alert-block.alert-error
                 ul
                   each msg in error
-                    li= msg
+                    li= msg.message || msg
     #push
   #footer
     .container-fluid
