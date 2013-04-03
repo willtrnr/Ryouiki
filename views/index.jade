@@ -28,12 +28,12 @@ append content
           button.btn.btn-primary(type='submit')
             i.icon-share
             |  Post
-  .row-fluid
-    .span12
-      if posts && posts.length
-        each post in posts
-          .well.well-small
-            include partials/post
+  if posts && posts.length
+    each post in posts
+      .row-fluid
+        .span12
+          include partials/post
+          hr
 
   .row-fluid
     .span12
