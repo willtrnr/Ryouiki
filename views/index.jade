@@ -29,9 +29,9 @@ append content
             i.icon-share
             |  Post
   if posts && posts.length
-    each post in posts
-      .row-fluid
-        .span12
+    .row-fluid
+      .span12
+        each post in posts
           include partials/post
           hr
 
