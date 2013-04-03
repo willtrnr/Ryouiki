@@ -38,3 +38,18 @@ body
   block scripts
     script(src='#{prefix}/js/jquery.min.js')
     script(src='#{prefix}/js/bootstrap.min.js')
+    script
+      $("img").click(function (e) {
+        var link = $(this).parent();
+        if (/\/thumbs\//.test($(this).attr('src'))) {
+          $(link).removeClass('pull-left');
+          $(this).attr('src', $(this).attr('src').replace('/thumbs/', '/uploads/'));
+          e.preventDefault();
+          return false;
+        } else if (/\/uploads\//.test($(this).attr('src'))) {
+          $(link).addClass('pull-left');
+          $(this).attr('src', $(this).attr('src').replace('/uploads/', '/thumbs/'));
+          e.preventDefault();
+          return false;
+        }
+      });
