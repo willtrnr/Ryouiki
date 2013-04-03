@@ -3,7 +3,7 @@ extends layout
 append content
   .row-fluid
     .span12
-      form.form-horizontal(method='post', enctype='multipart/form-data')
+      form.form-horizontal(action=(prefix + '/'), method='post', enctype='multipart/form-data')
         .control-group
           label.control-label(for='name') Name
           .controls
@@ -15,21 +15,20 @@ append content
         .control-group
           label.control-label(for='comment') Comment
           .controls
-            textarea#comment(name='comment', cols='30', rows='3')
+            textarea#comment(name='comment', cols='30', rows='3', required)
         .control-group
           label.control-label(for='file') File
           .controls
-            input#file(name='file', type='file')
+            input#file(name='file', type='file', required)
         .form-actions
           button.btn.btn-primary(type='submit')
             i.icon-share
             |  Post
-  if posts && posts.length
-    each post in posts
-      .row-fluid
-        .span12
-          - var replies = []
-          include partials/post
+  .row-fluid
+    .span12
+      if posts && posts.length
+        each post in posts
+              include partials/post
 
   .row-fluid
     .span12
@@ -37,7 +36,7 @@ append content
         ul
           li(class=((page == 1) ? 'disabled' : null))
               a(href=(prefix + '/page/' + (page - 1))) Prev
-          - for (var p = 1; p <= 10; ++p)
+          - for (var p = 1; p <= 5; ++p)
             li(class=((page == p) ? 'active' : null))
               a(href=(prefix + '/page/' + p))= p
           li

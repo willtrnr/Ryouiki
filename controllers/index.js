@@ -3,7 +3,7 @@ module.exports = function (app, db, config, passport) {
 
   //require('./acl')(app, db, config, passport);
 
-  require('./auth')(app, db, config, passport);
+  //require('./auth')(app, db, config, passport);
 
   app.get(prefix + '/page/:page', function (req, res) {
     req.params.page = Number(req.params.page) || 1;
@@ -30,9 +30,9 @@ module.exports = function (app, db, config, passport) {
                 } else res.redirect(prefix + '/' + p._id + '#' + r._id);
               } else res.redirect(prefix + '/' + post._id + '#' + r._id);
             });
-          } else res.redirect(prefix + '/' + req.params.id);
+          } else res.redirect(prefix + '/' + post._id);
         });
-      }
+      } else res.redirect(prefix + '/');
     });
   });
 
@@ -41,23 +41,24 @@ module.exports = function (app, db, config, passport) {
       if (!err && post) {
         db.post.findByOp(post._id, function (err, replies) {
           if (post.subject) res.render('thread', { post: post, replies: replies || [], pagetitle: post.subject });
+          else res.render('thread', { post: post, replies: replies || [] });
         });
       } else res.redirect(prefix + '/');
     });
   });
 
   app.post(prefix + '/', function (req, res) {
-    var p = new db.post(req.body);
-    p.save(function (err, post) {
-      if (!err && post) {
-        if (req.files.file && req.files.file.type.match(/^image\//i)) {
-          post.attachFile(req.files.file, function (err, p) {
-            if (!err) res.redirect(prefix + '/' + post._id);
-            else res.redirect(prefix + '/' + post._id);
-          });
-        } else res.redirect(prefix + '/' + post._id);
-      } else res.redirect(prefix + '/');
-    });
+    if (req.files.file && req.files.file.type.match(/^image\//i)) {
+      var p = new db.post(req.body);
+      p.save(function (err, post) {
+        if (!err && post) {
+            post.attachFile(req.files.file, function (err, p) {
+              if (!err) res.redirect(prefix + '/' + post._id);
+              else res.redirect(prefix + '/' + post._id);
+            });
+        } else res.redirect(prefix + '/');
+      });
+    } else res.redirect(prefix + '/');
   });
 
   app.get(prefix + '/', function (req, res) {

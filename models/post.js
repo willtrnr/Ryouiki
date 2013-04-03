@@ -59,10 +59,10 @@ module.exports = function (mongo, db, config, Schema) {
         self.file.name = self._id + '.' + self.file.type;
 
         img.resize((info.size.width >= info.size.height) ? config.thumbsize : 0, (info.size.width <= info.size.height) ? config.thumbsize : 0)
-           .write(path.join(config.datadir, 'thumbs', self.file.name), function (err) {
+           .write(path.join(config.datadir, config.prefix, 'thumbs', self.file.name), function (err) {
           if (!err) {
             var r = fs.createReadStream(file.path);
-            r.pipe(fs.createWriteStream(path.join(config.datadir, 'uploads', self.file.name)));
+            r.pipe(fs.createWriteStream(path.join(config.datadir, config.prefix, 'uploads', self.file.name)));
             r.on('error', function (err) {
               if (callback) callback(err, self);
             });

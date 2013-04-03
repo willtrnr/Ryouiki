@@ -1,5 +1,5 @@
 var express  = require('express'),
-    passport = require('passport'),
+    //passport = require('passport'),
     flash    = require('connect-flash'),
     cons     = require('consolidate'),
     http     = require('http'),
@@ -10,7 +10,7 @@ var db       = require('./models')(config);
 var app      = express();
 var sessions = new express.session.MemoryStore(); // Must change for cluster-safe
 
-require('./auth')(passport, db, config);
+//require('./auth')(passport, db, config);
 
 app.configure(function () {
   // Templating
@@ -27,7 +27,8 @@ app.configure(function () {
   // Standard stuff
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(express.bodyParser());
+  app.use(express.limit(config.maxsize));
+  app.use(express.bodyParser({ keepExtensions: true }));
   app.use(express.methodOverride());
   // Sessions
   app.use(express.cookieParser(config.secret));
@@ -35,19 +36,20 @@ app.configure(function () {
   // Flash messages
   app.use(flash());
   app.use(function (req, res, next) {
-    res.locals.success = req.flash('success')[0] || null;
-    res.locals.error = req.flash('error')[0] || null;
+    res.locals.success = req.flash('success') || null;
+    res.locals.error = req.flash('error') || null;
     next();
   });
   // Authentication
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(function (req, res, next) {
-    res.locals.user = req.user;
-    next();
-  });
+  //app.use(passport.initialize());
+  //app.use(passport.session());
+  //app.use(function (req, res, next) {
+  //  res.locals.user = req.user;
+  //  next();
+  //});
   // Route serving
   app.use(app.router);
+  // Static files serving
   app.use(express['static'](config.datadir));
   app.use(express['static'](path.join(__dirname, 'public')));
 });
@@ -57,7 +59,7 @@ app.configure('development', function () {
 });
 
 // http://madhums.me/2012/07/19/breaking-down-app-js-file-nodejs-express-mongoose/
-require('./controllers')(app, db, config, passport);
+require('./controllers')(app, db, config, null);//passport);
 
 http.createServer(app).listen(config.port || 3000, config.listen || '0.0.0.0', function () {
   console.log("Project " + config.title + " server listening on " + (config.listen || '0.0.0.0') + ":" + (config.port || 3000));
