@@ -23,6 +23,10 @@ module.exports = function (mongo, db, config, Schema) {
     password : { type: String }
   });
 
+  Post.path('comment').set(function (comment) {
+    return comment.trim() || null;
+  });
+
   Post.path('password').set(function (password) {
     return this.model('post').hashPassword(password);
   });
