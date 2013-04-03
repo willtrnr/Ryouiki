@@ -13,6 +13,7 @@ head
     link(href='#{prefix}/css/font-awesome.min.css', rel='stylesheet')
     //if IE 7
       link(href='#{prefix}/css/font-awesome-ie7.min.css', rel='stylesheet')
+    link(href='#{prefix}/css/style.css', rel='stylesheet')
 
   // HTML5 shim, for IE6-8 support of HTML5 elements
   //if lt IE 9
@@ -25,27 +26,34 @@ head
   link(rel='apple-touch-icon-precomposed', href='#{prefix}/ico/apple-touch-icon-57-precomposed.png')
   link(rel='shortcut icon', href='#{prefix}/ico/favicon.png')
 body
-  .container-fluid
-    block content
+  #wrap
+    .container-fluid
+      block content
+        .row-fluid
+          .span12
+            .page-header
+              h1
+                a(href=(prefix + '/'))= title
+        if success.length
+          .row-fluid
+            .span12
+              .alert.alert-block.alert-success
+                ul
+                  each msg in success
+                    li= msg
+        if error.length
+          .row-fluid
+            .span12
+              .alert.alert-block.alert-error
+                ul
+                  each msg in error
+                    li= msg
+    #push
+  #footer
+    .container-fluid
       .row-fluid
         .span12
-          .page-header
-            h1
-              a(href=(prefix + '/'))= title
-      if success.length
-        .row-fluid
-          .span12
-            .alert.alert-block.alert-success
-              ul
-                each msg in success
-                  li= msg
-      if error.length
-        .row-fluid
-          .span12
-            .alert.alert-block.alert-error
-              ul
-                each msg in error
-                  li= msg
+          p.muted.text-center= 'Copyright &copy; ' + new Date().getFullYear() + ' William Turner.'
 
   a(href="https://github.com/wwwiiilll/Ryouiki")
     img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png', alt='Fork me on GitHub')
