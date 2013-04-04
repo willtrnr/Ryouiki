@@ -7,11 +7,11 @@ module.exports = function (mongo, db, config, Schema) {
   var Post = new Schema({
     board    : { type: String },
     op       : { type: Schema.Types.ObjectId, ref: 'post' },
-    name     : { type: String, required: true, 'default': 'Anonymous' },
-    subject  : { type: String },
+    name     : { type: String, required: true, 'default': 'Anonymous', trim: true },
+    subject  : { type: String, trim: true },
     date     : { type: Date, required: true, 'default': Date.now },
     bumped   : { type: Date, required: true, 'default': Date.now },
-    comment  : { type: Buffer, required: true },
+    comment  : { type: Buffer, required: true, trim: true },
     file: {
       name   : { type: String },
       orig   : { type: String },
@@ -21,10 +21,6 @@ module.exports = function (mongo, db, config, Schema) {
       height : { type: Number }
     },
     password : { type: String }
-  });
-
-  Post.path('comment').set(function (comment) {
-    return comment.trim() || null;
   });
 
   Post.path('password').set(function (password) {
