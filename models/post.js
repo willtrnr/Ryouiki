@@ -40,7 +40,7 @@ module.exports = function (mongo, db, config, Schema) {
   };
 
   Post.statics.findPaged = function (page, callback) {
-    this.find({ op: null }).sort({ bumped: -1 }).limit(config.pagesize).skip((page - 1) * config.pagesize).exec(function (err, docs) {
+    this.find({ op: null }).sort({ bumped: -1 }).limit(config.pagesize).skip((((page - 1) * config.pagesize) || 1) - 1).exec(function (err, docs) {
       if (callback) callback(err, docs);
     });
   };
