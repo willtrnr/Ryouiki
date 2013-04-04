@@ -78,3 +78,10 @@ body
           return false;
         }
       });
+
+      $("form").submit(function (e) {
+        $(this).find("button[type=submit]").each(function (i, el) {
+          $(el).attr('disabled', 'disabled').html($(el).html() + "ing...");
+          $(el).find("i").attr('class', 'icon-spinner icon-spin');
+        });
+      });
