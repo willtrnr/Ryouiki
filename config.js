@@ -12,7 +12,7 @@ module.exports = {
   },
   datadir   : process.env.OPENSHIFT_DATA_DIR || (__dirname + '/data'),
   thumbsize : 128,
-  maxsize   : '5mb',
+  maxsize   : '15mb',
   replies   : 2,
-  pagesize  : 15
+  pagesize  : 20
 };
