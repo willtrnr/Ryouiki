@@ -40,3 +40,9 @@ html, body {
 .media, .media .media {
   margin-bottom: 15px;
 }
+
+blockquote p {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
