@@ -17,7 +17,10 @@
         li.muted= Number(post.file.size / 1024).toFixed(2) + ' KB'
         li.muted= post.file.width + 'x' + post.file.height
         li.muted= post.file.orig
-    | !{marked(post.comment.toString())}
+    if post.comment.toString()
+      | !{marked(post.comment.toString())}
+    else
+      p &nbsp;
 
     if post.replies && post.replies.length
       each reply in post.replies

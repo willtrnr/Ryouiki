@@ -14,4 +14,7 @@
         li.muted= Number(reply.file.size / 1024).toFixed(2) + ' KB'
         li.muted= reply.file.width + 'x' + reply.file.height
         li.muted= reply.file.orig
-    | !{marked(reply.comment.toString())}
+    if reply.comment.toString()
+      | !{marked(reply.comment.toString())}
+    else
+      p &nbsp;
