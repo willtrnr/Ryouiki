@@ -29,7 +29,8 @@
     "jade": "0.28.x",
     "gm": "1.8.x",
     "async": "0.2.x",
-    "marked": "*"
+    "marked": "0.2.x",
+    "highlight": "0.2.x"
   },
   "devDependencies": {},
   "engines": {

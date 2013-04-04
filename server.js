@@ -1,10 +1,11 @@
-var express  = require('express'),
-    //passport = require('passport'),
-    marked   = require('marked'),
-    flash    = require('connect-flash'),
-    cons     = require('consolidate'),
-    http     = require('http'),
-    path     = require('path');
+var highlight = require('highlight'),
+    //passport  = require('passport'),
+    express   = require('express'),
+    marked    = require('marked'),
+    flash     = require('connect-flash'),
+    cons      = require('consolidate'),
+    http      = require('http'),
+    path      = require('path');
 
 var config   = require('./config');
 var db       = require('./models')(config);
@@ -14,13 +15,16 @@ var sessions = new express.session.MemoryStore(); // Must change for cluster-saf
 //require('./auth')(passport, db, config);
 
 marked.setOptions({
-  pedantic: false,
   gfm: true,
-  sanitize: true,
   tables: false,
   breaks: false,
+  pedantic: false,
+  sanitize: true,
   smartLists: true,
-  langPrefix: 'lang-'
+  langPrefix: 'lang-',
+  highlight: function (code, lang) {
+    return highlight.Highlight(code);
+  }
 });
 
 app.configure(function () {
