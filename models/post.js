@@ -5,7 +5,7 @@ var crypto = require('crypto'),
 
 module.exports = function (mongo, db, config, Schema) {
   var Post = new Schema({
-    board    : { type: String },
+    board    : { type: String, required: true, 'default': 'dn' },
     op       : { type: Schema.Types.ObjectId, ref: 'post' },
     name     : { type: String, required: true, 'default': 'Anonymous', trim: true },
     subject  : { type: String, trim: true },
@@ -52,7 +52,7 @@ module.exports = function (mongo, db, config, Schema) {
   };
 
   Post.statics.findByOp = function (id, callback) {
-    this.find({ op: id }).exec(function (err, docs) {
+    this.find({ op: id }).sort({ date: 1 }).exec(function (err, docs) {
       if (callback) callback(err, docs);
     });
   };
