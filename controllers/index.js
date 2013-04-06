@@ -9,11 +9,18 @@ module.exports = function (app, db, config, passport) {
 
   app.get(prefix + '/page/:page', function (req, res) {
     req.params.page = Number(req.params.page) || 1;
-    db.post.findPaged(req.params.page, function (err, posts) {
-      async.each(posts, function (post, callback) {
-        post.findReplies(config.replies, callback);
-      }, function (err) {
-        res.render('index', { page: req.params.page, posts: posts, pagetitle: 'Page ' + req.params.page });
+    db.post.countPages(function (err, pages) {
+      db.post.findPaged(req.params.page, function (err, posts) {
+        async.each(posts, function (post, callback) {
+          post.findReplies(config.replies, callback);
+        }, function (err) {
+          res.render('index', {
+            page: req.params.page,
+            pages: pages,
+            posts: posts,
+            pagetitle: 'Page ' + req.params.page
+          });
+        });
       });
     });
   });
@@ -69,7 +76,10 @@ module.exports = function (app, db, config, passport) {
       if (!err && post) {
         db.post.findByOp(post._id, function (err, replies) {
           if (post.subject) res.render('thread', { post: post, replies: replies || [], pagetitle: post.subject });
-          else res.render('thread', { post: post, replies: replies || [] });
+          else res.render('thread', {
+            post: post,
+            replies: replies || []
+          });
         });
       } else res.redirect(prefix + '/');
     });
@@ -109,11 +119,17 @@ module.exports = function (app, db, config, passport) {
   });
 
   app.get(prefix + '/', function (req, res) {
-    db.post.findPaged(1, function (err, posts) {
-      async.each(posts, function (post, callback) {
-        post.findReplies(config.replies, callback);
-      }, function (err) {
-        res.render('index', { page: 1, posts: posts });
+    db.post.countPages(function (err, pages) {
+      db.post.findPaged(1, function (err, posts) {
+        async.each(posts, function (post, callback) {
+          post.findReplies(config.replies, callback);
+        }, function (err) {
+          res.render('index', {
+            page: 1,
+            pages: pages,
+            posts: posts
+          });
+        });
       });
     });
   });

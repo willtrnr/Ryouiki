@@ -39,9 +39,21 @@ module.exports = function (mongo, db, config, Schema) {
     });
   };
 
+  Post.statics.countAll = function (callback) {
+    this.count().exec(function (err, count) {
+      if (callback) callback(err, count);
+    });
+  };
+
   Post.statics.findPaged = function (page, callback) {
     this.find({ op: null }).sort({ bumped: -1 }).limit(config.pagesize).skip((page - 1) * config.pagesize).exec(function (err, docs) {
       if (callback) callback(err, docs);
+    });
+  };
+
+  Post.statics.countPages = function (callback) {
+    this.countAll(function (err, count) {
+      if (callback) callback(err, Math.ceil((count || 0) / config.pagesize));
     });
   };
 

@@ -39,10 +39,12 @@ append content
     .span12
       .pagination.pagination-centered
         ul
-          li(class=((page == 1) ? 'disabled' : null))
-              a(href=(prefix + '/page/' + (page - 1))) Prev
-          - for (var p = ((page > 3) ? page - 2 : 1); p <= ((page > 3) ? page + 2 : 5); ++p)
+          unless page == 1
+            li
+              a(href=(prefix + '/page/' + (page - 1)), rel='prev') Prev
+          - for (var p = 1; p <= pages; ++p)
             li(class=((page == p) ? 'active' : null))
               a(href=(prefix + '/page/' + p))= p
-          li
-            a(href=(prefix + '/page/' + (page + 1))) Next
+          unless page == pages
+            li
+              a(href=(prefix + '/page/' + (page + 1)), rel='next') Next
