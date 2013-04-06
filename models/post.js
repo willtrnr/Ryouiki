@@ -92,11 +92,19 @@ module.exports = function (mongo, db, config, Schema) {
 
   Post.methods.findReplies = function (count, callback) {
     var self = this;
-    this.model('post').find({ op: this._id }).sort({ _id: -1 }).limit(count).exec(function (err, docs) {
+    self.model('post').find({ op: self._id }).sort({ date: -1 }).limit(count).exec(function (err, docs) {
       if (!err && docs) self.replies = docs.reverse();
       if (callback) callback(err, self.replies);
     });
   };
-
+/*
+  Post.methods.parseComment = function (context, callback) {
+    var self = this;
+    if (self.comment.toString()) {
+      self.parsed = self.comment.toString().replace(/([a-f0-9]{24})/g, '[#$1]($1)');
+      if (callback) callback(null, self.parsed);
+    }
+  };
+*/
   return Post;
 };
