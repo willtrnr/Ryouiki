@@ -52,7 +52,7 @@ module.exports = function (mongo, db, config, Schema) {
   };
 
   Post.statics.countPages = function (callback) {
-    this.countAll(function (err, count) {
+    this.count({ op: null }).exec(function (err, count) {
       if (callback) callback(err, Math.ceil((count || 0) / config.pagesize));
     });
   };
