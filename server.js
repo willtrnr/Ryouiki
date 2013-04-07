@@ -1,18 +1,26 @@
 var highlight = require('highlight'),
-    //passport  = require('passport'),
-    express   = require('express'),
-    marked    = require('marked'),
-    flash     = require('connect-flash'),
-    cons      = require('consolidate'),
-    http      = require('http'),
-    path      = require('path');
+    //passport = require('passport'),
+    express = require('express'),
+    marked = require('marked'),
+    flash = require('connect-flash'),
+    cons = require('consolidate'),
+    http = require('http'),
+    path = require('path'),
+    fs = require('fs');
 
-var config   = require('./config');
-var db       = require('./models')(config);
-var app      = express();
+var config = require('./config');
+var db = require('./models')(config);
+var app = express();
 var sessions = new express.session.MemoryStore(); // Must change for cluster-safe
 
 //require('./auth')(passport, db, config);
+
+if (!fs.existsSync(path.join(config.datadir, 'uploads'))) {
+  fs.mkdirSync(path.join(config.datadir, 'uploads'), 0644);
+}
+if (!fs.existsSync(path.join(config.datadir, 'thumbs'))) {
+  fs.mkdirSync(path.join(config.datadir, 'thumbs'), 0644);
+}
 
 marked.setOptions({
   gfm: true,

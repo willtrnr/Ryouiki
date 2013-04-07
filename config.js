@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
   title     : 'Ryouiki',
   prefix    : '',
@@ -10,7 +12,7 @@ module.exports = {
     url     : process.env.OPENSHIFT_MONGODB_DB_URL,
     db      : 'board'
   },
-  datadir   : process.env.OPENSHIFT_DATA_DIR || (__dirname + '/data'),
+  datadir   : process.env.OPENSHIFT_DATA_DIR || path.join(__dirname, 'public'),
   thumbsize : 128,
   maxsize   : '15mb',
   replies   : 2,
