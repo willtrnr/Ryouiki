@@ -1,15 +1,28 @@
 var crypto = require('crypto'),
     path = require('path'),
+    time = require('time'),
     gm = require('gm').subClass({ imageMagick: true }),
     fs = require('fs');
 
 module.exports = function (mongo, db, config, Schema) {
+  function convertDate (date) {
+    var d = new time.Date(date);
+    d.setTimezone('America/Montreal');
+    return d;
+  }
+
+  function hashPassword (password) {
+      var shasum = crypto.createHash('sha512');
+      shasum.update(config.salt + password + config.salt);
+      return shasum.digest('hex');
+  }
+
   var Post = new Schema({
     board    : { type: String, required: true, 'default': 'dn' },
     op       : { type: Schema.Types.ObjectId, ref: 'post' },
     name     : { type: String, required: true, 'default': 'Anonymous', trim: true },
     subject  : { type: String, trim: true },
-    date     : { type: Date, required: true, 'default': Date.now },
+    date     : { type: Date, required: true, 'default': Date.now, get: convertDate },
     bumped   : { type: Date, required: true, 'default': Date.now },
     comment  : { type: Buffer, trim: true },
     file: {
@@ -20,22 +33,12 @@ module.exports = function (mongo, db, config, Schema) {
       width  : { type: Number },
       height : { type: Number }
     },
-    password : { type: String }
-  });
-
-  Post.path('password').set(function (password) {
-    return this.model('post').hashPassword(password);
+    password : { type: String, set: hashPassword }
   });
 
   Post.virtual('url').get(function () {
     return (config.prefix + '/' + ((post.op) ? this.op + '#' : '') + this._id);
   });
-
-  Post.statics.hashPassword = function (password) {
-    var shasum = crypto.createHash('sha512');
-    shasum.update(config.salt + password + config.salt);
-    return shasum.digest('hex');
-  };
 
   Post.statics.findAll = function (callback) {
     this.find().exec(function (err, docs) {

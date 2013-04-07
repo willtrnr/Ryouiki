@@ -30,7 +30,8 @@
     "gm": "1.8.x",
     "async": "0.2.x",
     "marked": "0.2.x",
-    "highlight": "0.2.x"
+    "highlight": "0.2.x",
+    "time": "0.9.x"
   },
   "devDependencies": {},
   "engines": {
