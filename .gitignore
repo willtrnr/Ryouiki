@@ -15,4 +15,5 @@ results
 npm-debug.log
 
 node_modules
-data
+public/uploads
+public/thumbs

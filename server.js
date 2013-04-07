@@ -74,7 +74,7 @@ app.configure(function () {
   // Route serving
   app.use(app.router);
   // Static files serving
-  app.use(express['static'](config.datadir));
+  if (config.datadir != path.join(__dirname, 'public')) app.use(express['static'](config.datadir));
   app.use(express['static'](path.join(__dirname, 'public')));
 });
 

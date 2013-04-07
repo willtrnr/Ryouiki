@@ -27,6 +27,10 @@ module.exports = function (mongo, db, config, Schema) {
     return this.model('post').hashPassword(password);
   });
 
+  Post.virtual('url').get(function () {
+    return (config.prefix + '/' + ((post.op) ? this.op + '#' : '') + this._id);
+  });
+
   Post.statics.hashPassword = function (password) {
     var shasum = crypto.createHash('sha512');
     shasum.update(config.salt + password + config.salt);
@@ -104,19 +108,21 @@ module.exports = function (mongo, db, config, Schema) {
 
   Post.methods.findReplies = function (count, callback) {
     var self = this;
-    self.model('post').find({ op: self._id }).sort({ date: -1 }).limit(count).exec(function (err, docs) {
-      if (!err && docs) self.replies = docs.reverse();
-      if (callback) callback(err, self.replies);
+    self.countReplies(function (err, c) {
+      self.model('post').find({ op: self._id }).sort({ date: -1 }).limit(count).exec(function (err, docs) {
+        if (!err && docs) self.replies = docs.reverse();
+        if (callback) callback(err, self.replies, c);
+      });
     });
   };
-/*
-  Post.methods.parseComment = function (context, callback) {
+
+  Post.methods.countReplies = function (callback) {
     var self = this;
-    if (self.comment.toString()) {
-      self.parsed = self.comment.toString().replace(/([a-f0-9]{24})/g, '[#$1]($1)');
-      if (callback) callback(null, self.parsed);
-    }
+    self.model('post').count({ op: self._id }).exec(function (err, count) {
+      if (!err && (count || count === 0)) self.replycount = count;
+      if (callback) callback(err, count);
+    });
   };
-*/
+
   return Post;
 };

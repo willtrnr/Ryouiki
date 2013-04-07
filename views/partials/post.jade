@@ -22,6 +22,10 @@
     else
       p &nbsp;
 
+    if post.replycount
+      span.badge.badge-warning= post.replycount
+      | #{' '}
+      a(href=(prefix + '/' + ((post.op) ? post.op + '#' : '') + post._id))= 'Repl' + ((post.replycount > 1) ? 'ies' : 'y')
     if post.replies && post.replies.length
       each reply in post.replies
         include reply

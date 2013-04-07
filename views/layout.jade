@@ -69,12 +69,12 @@ body
         var link = $(this).parent();
         if (/\/thumbs\//.test($(this).attr('src'))) {
           $(link).removeClass('pull-left');
-          $(this).attr('src', $(this).attr('src').replace('/thumbs/', '/uploads/'));
+          $(this).removeClass('media-object').attr('src', $(this).attr('src').replace('/thumbs/', '/uploads/'));
           e.preventDefault();
           return false;
         } else if (/\/uploads\//.test($(this).attr('src'))) {
           $(link).addClass('pull-left');
-          $(this).attr('src', $(this).attr('src').replace('/uploads/', '/thumbs/'));
+          $(this).addClass('media-object').attr('src', $(this).attr('src').replace('/uploads/', '/thumbs/'));
           e.preventDefault();
           return false;
         }
@@ -85,8 +85,4 @@ body
           $(el).attr('disabled', 'disabled').html($(el).html() + "ing...");
           $(el).find("i").attr('class', 'icon-spinner icon-spin');
         });
-      });
-
-      $("a[href^=http]").each(function (e, lnk) {
-        $(lnk).attr('href', 'http://coinurl.com/redirect.php?id=792b94f1e3cbe74e1465f07549db9a3a&url=' + encodeURIComponent($(lnk).attr('href')));
       });
