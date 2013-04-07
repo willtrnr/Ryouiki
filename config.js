@@ -10,7 +10,7 @@ module.exports = {
   port      : Number(process.env.OPENSHIFT_NODEJS_PORT) || ((process.env.NODE_ENV == 'production') ? 80 : 3000),
   mongodb: {
     url     : process.env.OPENSHIFT_MONGODB_DB_URL,
-    db      : 'board'
+    db      : 'boards'
   },
   datadir   : process.env.OPENSHIFT_DATA_DIR || path.join(__dirname, 'public'),
   thumbsize : 128,
