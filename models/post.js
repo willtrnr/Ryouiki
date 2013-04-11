@@ -24,7 +24,7 @@ module.exports = function (mongo, db, config, Schema) {
     subject  : { type: String, trim: true },
     date     : { type: Date, required: true, 'default': Date.now, get: convertDate },
     bumped   : { type: Date, required: true, 'default': Date.now },
-    comment  : { type: String, trim: true },
+    comment  : { type: Buffer, trim: true },
     file: {
       name   : { type: String },
       orig   : { type: String },
