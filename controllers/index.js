@@ -33,7 +33,7 @@ module.exports = function (app, db, config, passport) {
           r.op = post._id;
           r.save(function (err, reply) {
             if (!err && r) {
-              if (r.name.toLowerCase() != 'sage' && r.comment.toString().toLowerCase() != 'sage')
+              if (!(r.name.toLowerCase() == 'sage' || r.comment.toString().toLowerCase() == 'sage'))
                 post.bumped = Date.now();
               post.save(function (err, p) {
                 if (!err && p) {
