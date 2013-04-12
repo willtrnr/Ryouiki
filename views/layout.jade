@@ -34,7 +34,8 @@ body
           .span12
             .page-header
               h1
-                a(href=(prefix + '/'))= title
+                a(href=(prefix + '/'))
+                  img(src='#{prefix}/img/rYouiki.png', alt=title)
         if success.length
           .row-fluid
             .span12
