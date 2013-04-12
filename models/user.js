@@ -1,14 +1,14 @@
 var crypto = require('crypto');
 
 module.exports = function (mongo, db, config, Schema) {
+  function hashPassword (password) {
+    return this.model('user').hashPassword(password);
+  }
+
   var User = new Schema({
     username : { type: String, index: { unique: true } },
-    password : { type: String, requried: true },
+    password : { type: String, requried: true, set: hashPassword },
     email    : { type: String, index: { unique: true } }
-  });
-
-  User.path('password').set(function (password) {
-    return this.model('user').hashPassword(password);
   });
 
   User.statics.hashPassword = function (password) {

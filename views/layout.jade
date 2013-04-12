@@ -68,7 +68,7 @@ body
     script
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create', 'UA-3944936-4', 'willisite.com'); ga('send', 'pageview');
     script
-      $("img").click(function (e) {
+      $("body").on('click', "img", function (e) {
         var link = $(this).parent();
         if (/\/thumbs\//.test($(this).attr('src'))) {
           $(link).removeClass('pull-left');
@@ -83,9 +83,13 @@ body
         }
       });
 
-      $("form").submit(function (e) {
+      $("body").on('submit', "form", function (e) {
         $(this).find("button[type=submit]").each(function (i, el) {
           $(el).attr('disabled', 'disabled').html($(el).html() + "ing...");
           $(el).find("i").attr('class', 'icon-spinner icon-spin');
         });
+      });
+
+      $("body").on('click', ".btn-danger", function (e) {
+
       });

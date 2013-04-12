@@ -22,6 +22,18 @@ if (!fs.existsSync(path.join(config.datadir, 'thumbs'))) {
   fs.mkdirSync(path.join(config.datadir, 'thumbs'), 0644);
 }
 
+db.board.findById(config.mainboard, function (err, board) {
+  if (!err && !board) {
+    board = new db.board();
+    board._id = config.mainboard;
+    board.name = config.mainboard;
+    board.desc = config.mainboard;
+    board.save(function (err, b) {
+      if (err) console.log(err);
+    });
+  }
+});
+
 marked.setOptions({
   gfm: true,
   tables: false,
@@ -71,11 +83,11 @@ app.configure(function () {
   //  res.locals.user = req.user;
   //  next();
   //});
-  // Route serving
-  app.use(app.router);
   // Static files serving
   if (config.datadir != path.join(__dirname, 'public')) app.use(express['static'](config.datadir));
   app.use(express['static'](path.join(__dirname, 'public')));
+  // Route serving
+  app.use(app.router);
 });
 
 app.configure('development', function () {

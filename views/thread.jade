@@ -3,7 +3,7 @@ extends layout
 append content
   .row-fluid
     .span12
-      form.form-horizontal(action=(prefix + '/' + post._id), method='post', enctype='multipart/form-data')
+      form.form-horizontal(action=(prefix + '/' + board._id + '/' + post._id), method='post', enctype='multipart/form-data')
         .control-group
           label.control-label(for='name') Name
           .controls

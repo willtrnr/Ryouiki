@@ -16,5 +16,6 @@ module.exports = {
   thumbsize : 128,
   maxsize   : '15mb',
   replies   : 2,
-  pagesize  : 20
+  pagesize  : 20,
+  mainboard : 'dn'
 };

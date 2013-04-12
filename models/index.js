@@ -5,6 +5,7 @@ module.exports = function (config) {
   var mongo = mongoose.createConnection((config.mongodb.url || 'mongodb://localhost:27017/') + config.mongodb.db);
 
   var db = {};
+  db.Board = require('./board')(mongo, db, config, Schema);
   db.User = require('./user')(mongo, db, config, Schema);
   db.Post = require('./post')(mongo, db, config, Schema);
 

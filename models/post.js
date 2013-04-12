@@ -14,8 +14,8 @@ module.exports = function (mongo, db, config, Schema) {
   }
 
   var Post = new Schema({
-    board    : { type: String, required: true, 'default': 'dn' },
-    op       : { type: Schema.Types.ObjectId, ref: 'post' },
+    board    : { type: String,ref: 'board', required: true, 'default': 'dn', index: true },
+    op       : { type: Schema.Types.ObjectId, ref: 'post', index: true },
     name     : { type: String, required: true, 'default': 'Anonymous', trim: true },
     subject  : { type: String, trim: true },
     date     : { type: Date, required: true, 'default': Date.now, get: convertDate },
@@ -43,26 +43,26 @@ module.exports = function (mongo, db, config, Schema) {
     return shasum.digest('hex');
   };
 
-  Post.statics.findAll = function (callback) {
-    this.find().exec(function (err, docs) {
+  Post.statics.findAll = function (board, callback) {
+    this.find({ board: board }).exec(function (err, docs) {
       if (callback) callback(err, docs);
     });
   };
 
-  Post.statics.countAll = function (callback) {
-    this.count().exec(function (err, count) {
+  Post.statics.countAll = function (board, callback) {
+    this.count({ board: board }).exec(function (err, count) {
       if (callback) callback(err, count);
     });
   };
 
-  Post.statics.findPaged = function (page, callback) {
-    this.find({ op: null }).sort({ bumped: -1 }).limit(config.pagesize).skip((page - 1) * config.pagesize).exec(function (err, docs) {
+  Post.statics.findPaged = function (board, page, callback) {
+    this.find({ board: board, op: null }).sort({ bumped: -1 }).limit(config.pagesize).skip((page - 1) * config.pagesize).exec(function (err, docs) {
       if (callback) callback(err, docs);
     });
   };
 
-  Post.statics.countPages = function (callback) {
-    this.count({ op: null }).exec(function (err, count) {
+  Post.statics.countPages = function (board, callback) {
+    this.count({ board: board, op: null }).exec(function (err, count) {
       if (callback) callback(err, Math.ceil((count || 0) / config.pagesize));
     });
   };
@@ -79,7 +79,7 @@ module.exports = function (mongo, db, config, Schema) {
     });
   };
 
-  Post.methods.attachFile = function (file, callback) {
+  Post.methods.attachFile = function (file, board, callback) {
     var self = this;
     var img = gm(file.path + ((file.type == 'image/gif') ? '[0]' : ''));
     img.identify(function (err, info) {

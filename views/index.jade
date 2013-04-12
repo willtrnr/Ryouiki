@@ -3,7 +3,7 @@ extends layout
 append content
   .row-fluid
     .span12
-      form.form-horizontal(action=(prefix + '/'), method='post', enctype='multipart/form-data')
+      form.form-horizontal(action=(prefix + '/' + board._id + '/'), method='post', enctype='multipart/form-data')
         .control-group
           label.control-label(for='name') Name
           .controls
@@ -41,10 +41,10 @@ append content
         ul
           unless page == 1
             li
-              a(href=(prefix + '/page/' + (page - 1)), rel='prev') Prev
+              a(href=(prefix + '/' + board._id + '/?p=' + (page - 1)), rel='prev') Prev
           - for (var p = 1; p <= pages; ++p)
             li(class=((page == p) ? 'active' : null))
-              a(href=(prefix + '/page/' + p))= p
+              a(href=(prefix + '/' + board._id + '/?p=' + p))= p
           unless page == pages
             li
-              a(href=(prefix + '/page/' + (page + 1)), rel='next') Next
+              a(href=(prefix + '/' + board._id + '/?p=' + (page + 1)), rel='next') Next

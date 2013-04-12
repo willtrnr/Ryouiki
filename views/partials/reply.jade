@@ -1,4 +1,4 @@
-.media
+.media(id=reply._id)
   if reply.file.name
     a.pull-left(href=(prefix + '/uploads/' + reply.file.name))
       img.media-object(src=(prefix + '/thumbs/' + reply.file.name))
@@ -9,11 +9,15 @@
       li
         span.label.label-info= reply.date
       li
-        a(name=reply._id, href=(prefix + '/' + reply.op + '#' + reply._id))= reply._id
+        a(name=reply._id, href=(prefix + '/' + board._id + '/' + reply.op + '#' + reply._id))= reply._id
       if reply.file.name
         li.muted= Number(reply.file.size / 1024).toFixed(2) + ' KB'
         li.muted= reply.file.width + 'x' + reply.file.height
         li.muted= reply.file.orig
+      if reply.password
+        li
+          button.btn.btn-danger.btn-mini(type='button', data-id=post._id)
+            i.icon-trash
     if reply.comment.toString()
       | !{marked(reply.comment.toString())}
     else

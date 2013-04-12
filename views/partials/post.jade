@@ -1,4 +1,4 @@
-.media
+.media(id=post._id)
   if post.file.name
     a.pull-left(href=(prefix + '/uploads/' + post.file.name))
       img.media-object(src=(prefix + '/thumbs/' + post.file.name))
@@ -12,11 +12,15 @@
       li
         span.label.label-info= post.date
       li
-        a(name=post._id, href=(prefix + '/' + ((post.op) ? post.op + '#' : '') + post._id))= post._id
+        a(name=post._id, href=(prefix + '/' + board._id + '/' + ((post.op) ? post.op + '#' : '') + post._id))= post._id
       if post.file.name
         li.muted= Number(post.file.size / 1024).toFixed(2) + ' KB'
         li.muted= post.file.width + 'x' + post.file.height
         li.muted= post.file.orig
+      if post.password
+        li
+          button.btn.btn-danger.btn-mini(type='button', data-id=post._id)
+            i.icon-trash
     if post.comment.toString()
       | !{marked(post.comment.toString())}
     else
@@ -25,7 +29,7 @@
     if post.replycount
       span.badge.badge-warning= post.replycount
       | #{' '}
-      a(href=(prefix + '/' + ((post.op) ? post.op + '#' : '') + post._id))= 'Repl' + ((post.replycount > 1) ? 'ies' : 'y')
+      a(href=(prefix + '/' + board._id + '/' + ((post.op) ? post.op + '#' : '') + post._id))= 'Repl' + ((post.replycount > 1) ? 'ies' : 'y')
     if post.replies && post.replies.length
       each reply in post.replies
         include reply
