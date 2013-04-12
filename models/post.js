@@ -6,15 +6,11 @@ var crypto = require('crypto'),
 
 module.exports = function (mongo, db, config, Schema) {
   function convertDate (date) {
-    var d = new time.Date(date);
-    d.setTimezone('America/Montreal');
-    return d;
+    return new time.Date(date).setTimezone('America/Montreal');
   }
 
   function hashPassword (password) {
-      var shasum = crypto.createHash('sha512');
-      shasum.update(config.salt + password + config.salt);
-      return shasum.digest('hex');
+    return this.model('post').hashPassword(password);
   }
 
   var Post = new Schema({
@@ -39,6 +35,13 @@ module.exports = function (mongo, db, config, Schema) {
   Post.virtual('url').get(function () {
     return (config.prefix + '/' + ((post.op) ? this.op + '#' : '') + this._id);
   });
+
+  Post.statics.hashPassword = function (password) {
+    if (!password) return null;
+    var shasum = crypto.createHash('sha512');
+    shasum.update(config.salt + password + config.salt);
+    return shasum.digest('hex');
+  };
 
   Post.statics.findAll = function (callback) {
     this.find().exec(function (err, docs) {
