@@ -7,8 +7,7 @@ module.exports = function (app, db, config, passport) {
 
   //require('./auth')(app, db, config, passport);
 
-  app.get(prefix + '/:board/*', function (req, res, next) {
-    res.locals.page = Number(req.query.p) || 1;
+  app.all(prefix + '/:board/*', function (req, res, next) {
     req.params.board = req.params.board || config.mainboard;
     db.board.findById(req.params.board, function (err, board) {
       if (!err && board) {
@@ -116,6 +115,7 @@ module.exports = function (app, db, config, passport) {
   });
 
   app.get(prefix + '/:board/', function (req, res) {
+    res.locals.page = Number(req.query.p) || 1;
     db.post.countPages(res.locals.board._id, function (err, pages) {
       db.post.findPaged(res.locals.board._id, res.locals.page, function (err, posts) {
         async.each(posts, function (post, callback) {
