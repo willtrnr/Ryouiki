@@ -46,7 +46,7 @@ module.exports = function (app, db, config, passport) {
                     });
                   } else {
                     req.flash('success', 'Reply posted.');
-                    res.redirect(prefix + '/' + res.locals.board._id + p._id + '#' + r._id);
+                    res.redirect(prefix + '/' + res.locals.board._id + '/' + p._id + '#' + r._id);
                   }
                 } else {
                   req.flash('error', err);
