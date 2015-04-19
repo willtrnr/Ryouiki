@@ -5,14 +5,13 @@ module.exports = {
   prefix    : '',
   secret    : '!N_D35U_W3_7RU$7~',
   salt      : '0P_I$_4_F46607!',
-  host      : process.env.OPENSHIFT_APP_DNS || 'localhost',
-  listen    : process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-  port      : Number(process.env.OPENSHIFT_NODEJS_PORT) || ((process.env.NODE_ENV == 'production') ? 80 : 3000),
+  listen    : '0.0.0.0',
+  port      : Number(process.env.PORT || ((process.env.NODE_ENV == 'production') ? 80 : 3000)),
   mongodb: {
-    url     : process.env.OPENSHIFT_MONGODB_DB_URL,
-    db      : 'boards'
+    url     : process.env.MONGO_URL || 'mongo://localhost',
+    db      : process.env.MONGODB_DATABASE || 'boards'
   },
-  datadir   : process.env.OPENSHIFT_DATA_DIR || path.join(__dirname, 'public'),
+  datadir   : path.join(__dirname, 'public'),
   thumbsize : 128,
   maxsize   : '15mb',
   replies   : 2,
