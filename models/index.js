@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
 
 module.exports = function (config) {
-  var mongo = mongoose.createConnection((config.mongodb.url || 'mongodb://localhost:27017/') + config.mongodb.db);
+  var mongo = mongoose.createConnection(config.mongodb.url);
 
   var db = {};
   db.Board = require('./board')(mongo, db, config, Schema);

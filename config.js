@@ -8,8 +8,7 @@ module.exports = {
   listen    : '0.0.0.0',
   port      : Number(process.env.PORT || ((process.env.NODE_ENV == 'production') ? 80 : 3000)),
   mongodb: {
-    url     : process.env.MONGO_URL || 'mongo://localhost',
-    db      : process.env.MONGODB_DATABASE || 'boards'
+    url     : process.env.MONGO_URL || 'mongodb://localhost:27017/boards'
   },
   datadir   : path.join(__dirname, 'public'),
   thumbsize : 128,
